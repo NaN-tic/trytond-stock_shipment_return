@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="return_shipment_in_start_view_form">
+            <field name="model">stock.shipment.in.return_shipment.start</field>
+            <field name="type">form</field>
+            <field name="name">return_shipment_in_start_form</field>
+        </record>
+
+        <record model="ir.action.wizard" id="wizard_return_shipment_in">
+            <field name="name">Return Shipment</field>
+            <field name="wiz_name">stock.shipment.in.return_shipment</field>
+            <field name="model">stock.shipment.in</field>
+        </record>
+        <record model="ir.action.keyword"
+        		id="act_wizard_return_shipment_in_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">stock.shipment.in,-1</field>
+            <field name="action" ref="wizard_return_shipment_in"/>
+        </record>
+    </data>
+</tryton>
