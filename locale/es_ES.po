@@ -1,0 +1,31 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:stock.shipment.in.return_shipment.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "model:ir.action,name:wizard_return_shipment_in"
+msgid "Return Shipment"
+msgstr "Devolver albarán"
+
+msgctxt "model:stock.shipment.in.return_shipment.start,name:"
+msgid "Return Supplier Shipment"
+msgstr "Albarán de devolución a proveedor"
+
+msgctxt "view:stock.shipment.in.return_shipment.start:"
+msgid "Are you sure to return those/this supplier shipment(s)?"
+msgstr "¿Está seguro de devolver este/estos albaran(es) de proveedor?"
+
+msgctxt "view:stock.shipment.in.return_shipment.start:"
+msgid "Return Supplier Shipment"
+msgstr "Albarán de devolución a proveedor"
+
+msgctxt "wizard_button:stock.shipment.in.return_shipment,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:stock.shipment.in.return_shipment,start,return_:"
+msgid "Return"
+msgstr "Devolver"
