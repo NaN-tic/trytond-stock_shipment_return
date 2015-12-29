@@ -5,8 +5,17 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-__all__ = ['ReturnShipmentInStart', 'ReturnShipmentIn']
+__all__ = ['Move', 'ReturnShipmentInStart', 'ReturnShipmentIn']
 __metaclass__ = PoolMeta
+
+
+class Move:
+    __name__ = 'stock.move'
+
+    @classmethod
+    def _get_origin(cls):
+        origins = super(Move, cls)._get_origin()
+        return origins + ['stock.move']
 
 
 class ReturnShipmentInStart(ModelView):
