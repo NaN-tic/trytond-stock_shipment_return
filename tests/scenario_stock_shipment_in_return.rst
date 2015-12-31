@@ -119,7 +119,6 @@ Receive products::
     >>> incoming_move = shipment_in.incoming_moves.new()
     >>> incoming_move.product = product2
     >>> incoming_move.quantity = 200
-    >>> incoming_move.second_quantity = 10
     >>> incoming_move.from_location = supplier_loc
     >>> incoming_move.to_location = shipment_in.warehouse_input
     >>> shipment_in.save()
