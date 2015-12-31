@@ -37,16 +37,11 @@ class ReturnShipmentIn(Wizard):
         pool = Pool()
         Move = pool.get('stock.move')
         ShipmentIn = pool.get('stock.shipment.in')
-        ShipmentInReturn = pool.get('stock.shipment.in.return')
 
         shipment_in_ids = Transaction().context['active_ids']
         shipment_in_returns = []
         for shipment_in in ShipmentIn.browse(shipment_in_ids):
-            shipment_in_return = ShipmentInReturn()
-            shipment_in_return.company = shipment_in.company
-            shipment_in_return.reference = shipment_in.code
-            shipment_in_return.from_location = shipment_in.warehouse_storage
-            shipment_in_return.to_location = shipment_in.supplier_location
+            shipment_in_return = self._get_return_shipment(shipment_in)
             shipment_in_return.save()
             for inv_move in shipment_in.inventory_moves:
                 Move.copy([inv_move], {
@@ -67,3 +62,13 @@ class ReturnShipmentIn(Wizard):
         if len(shipment_in_returns) == 1:
             action['views'].reverse()
         return action, data
+
+    def _get_return_shipment(self, shipment_in):
+        pool = Pool()
+        ShipmentInReturn = pool.get('stock.shipment.in.return')
+        shipment = ShipmentInReturn()
+        shipment.company = shipment_in.company
+        shipment.reference = shipment_in.code
+        shipment.from_location = shipment_in.warehouse_storage
+        shipment.to_location = shipment_in.supplier_location
+        return shipment
