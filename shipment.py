@@ -1,11 +1,12 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import ModelView
+from trytond.model import ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-__all__ = ['Move', 'ReturnShipmentInStart', 'ReturnShipmentIn']
+__all__ = ['Move', 'ShipmentInReturn',
+    'ReturnShipmentInStart', 'ReturnShipmentIn']
 __metaclass__ = PoolMeta
 
 
@@ -16,6 +17,13 @@ class Move:
     def _get_origin(cls):
         origins = super(Move, cls)._get_origin()
         return origins + ['stock.move']
+
+
+class ShipmentInReturn:
+    __name__ = 'stock.shipment.in.return'
+    origin = fields.Reference('Origin', selection=[
+            ('stock.shipment.in', 'Shipment In'),
+            ], select=True, readonly=True)
 
 
 class ReturnShipmentInStart(ModelView):
@@ -54,7 +62,7 @@ class ReturnShipmentIn(Wizard):
                         # 'currency': inv_move.origin.currency.id,
                         'unit_price': inv_move.product.cost_price,
                         'currency': inv_move.company.currency.id,
-                        'origin': str(inv_move),
+                        'origin': None,
                     })
             shipment_in_returns.append(shipment_in_return)
 
@@ -71,4 +79,5 @@ class ReturnShipmentIn(Wizard):
         shipment.reference = shipment_in.code
         shipment.from_location = shipment_in.warehouse_storage
         shipment.to_location = shipment_in.supplier_location
+        shipment.origin = shipment_in
         return shipment
