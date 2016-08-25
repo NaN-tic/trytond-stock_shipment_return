@@ -76,8 +76,9 @@ class ReturnShipmentIn(Wizard):
         ShipmentInReturn = pool.get('stock.shipment.in.return')
         shipment = ShipmentInReturn()
         shipment.company = shipment_in.company
-        shipment.reference = shipment_in.code
+        shipment.reference = shipment_in.number
         shipment.from_location = shipment_in.warehouse_storage
         shipment.to_location = shipment_in.supplier_location
         shipment.origin = shipment_in
+        shipment.supplier = shipment_in.supplier
         return shipment
