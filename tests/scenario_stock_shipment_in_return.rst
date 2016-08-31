@@ -12,6 +12,12 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.modules.company.tests.tools import create_company, \
+    ...     get_company
+    >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
+    ...     create_chart, get_accounts, create_tax, set_tax_code
+    >>> from trytond.modules.account_invoice.tests.tools import \
+    ...     set_fiscalyear_invoice_sequences, create_payment_term
     >>> today = datetime.date.today()
     >>> yesterday = today - relativedelta(days=1)
 
@@ -22,36 +28,16 @@ Create database::
 
 Install stock_shipment_return Module::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> modules = Module.find([('name', '=', 'stock_shipment_return')])
     >>> Module.install([x.id for x in modules], config.context)
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create company::
 
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
-    >>> Company = Model.get('company.company')
-    >>> Party = Model.get('party.party')
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='Dunder Mifflin')
-    >>> party.save()
-    >>> company.party = party
-    >>> currencies = Currency.find([('code', '=', 'USD')])
-    >>> if not currencies:
-    ...     currency = Currency(name='U.S. Dollar', symbol='$', code='USD',
-    ...         rounding=Decimal('0.01'), mon_grouping='[3, 3, 0]',
-    ...         mon_decimal_point='.', mon_thousands_sep=',')
-    ...     currency.save()
-    ...     CurrencyRate(date=today + relativedelta(month=1, day=1),
-    ...         rate=Decimal('1.0'), currency=currency).save()
-    ... else:
-    ...     currency, = currencies
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find()
+    >>> _ = create_company()
+    >>> company = get_company()
+    >>> party = company.party
 
 Reload the context::
 
@@ -64,12 +50,6 @@ Create supplier::
     >>> supplier = Party(name='Supplier')
     >>> supplier.save()
 
-Create category::
-
-    >>> ProductCategory = Model.get('product.category')
-    >>> category = ProductCategory(name='Category')
-    >>> category.save()
-
 Create product::
 
     >>> ProductUom = Model.get('product.uom')
@@ -78,7 +58,6 @@ Create product::
     >>> unit, = ProductUom.find([('name', '=', 'Unit')])
     >>> template = ProductTemplate()
     >>> template.name = 'Product 1'
-    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('20')
@@ -88,7 +67,6 @@ Create product::
 
     >>> template = ProductTemplate()
     >>> template.name = 'Product 2'
-    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('30')
