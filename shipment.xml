@@ -30,7 +30,9 @@
         <record model="ir.action.act_window" id="act_shipment_in_returns">
             <field name="name">Returns</field>
             <field name="res_model">stock.shipment.in.return</field>
-            <field name="domain">[('origin.id', 'in', Eval('active_ids'), 'stock.shipment.in')]</field>
+            <field name="domain"
+                eval="[('origin.id', 'in', Eval('active_ids'), 'stock.shipment.in')]"
+                pyson="1"/>
         </record>
         <record model="ir.action.keyword"
                 id="act_open_shipment_in_returns_keyword1">
