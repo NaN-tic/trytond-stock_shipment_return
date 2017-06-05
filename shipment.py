@@ -7,10 +7,10 @@ from trytond.wizard import Wizard, StateAction, StateView, Button
 
 __all__ = ['Move', 'ShipmentInReturn',
     'ReturnShipmentInStart', 'ReturnShipmentIn']
-__metaclass__ = PoolMeta
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'stock.move'
 
     @classmethod
@@ -20,6 +20,7 @@ class Move:
 
 
 class ShipmentInReturn:
+    __metaclass__ = PoolMeta
     __name__ = 'stock.shipment.in.return'
     origin = fields.Reference('Origin', selection=[
             (None, ''),
