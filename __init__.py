@@ -2,6 +2,7 @@
 # copyright notices and license terms.
 from trytond.pool import Pool
 from . import shipment
+from . import purchase
 
 
 def register():
@@ -9,6 +10,7 @@ def register():
         shipment.Move,
         shipment.ShipmentInReturn,
         shipment.ReturnShipmentInStart,
+        purchase.Purchase,
         module='stock_shipment_return', type_='model')
     Pool.register(
         shipment.ReturnShipmentIn,
