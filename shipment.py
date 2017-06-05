@@ -22,6 +22,7 @@ class Move:
 class ShipmentInReturn:
     __name__ = 'stock.shipment.in.return'
     origin = fields.Reference('Origin', selection=[
+            (None, ''),
             ('stock.shipment.in', 'Shipment In'),
             ], select=True, readonly=True)
 
