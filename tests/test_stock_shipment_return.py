@@ -3,30 +3,24 @@
 import doctest
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
 
-class TestCase(unittest.TestCase):
-    'Test module'
-
-    def setUp(self):
-        trytond.tests.test_tryton.install_module('stock_shipment_return')
-
-    def test0005views(self):
-        'Test views'
-        test_view('stock_shipment_return')
-
-    def test0006depends(self):
-        'Test depends'
-        test_depends()
+class StockShipmentReturnTestCase(unittest.TestCase):
+    'Test Stock Shipment Return module'
+    module = 'stock_shipment_return'
 
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
+    from trytond.modules.company.tests import test_company
+    for test in test_company.suite():
+        if test not in suite and not isinstance(test, doctest.DocTestCase):
+            suite.addTest(test)
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+            StockShipmentReturnTestCase))
     suite.addTests(doctest.DocFileSuite(
-            'scenario_stock_shipment_in_return.rst',
+            'scenario_stock_shipment_return.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

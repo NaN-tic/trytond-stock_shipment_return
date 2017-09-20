@@ -9,9 +9,12 @@ def register():
     Pool.register(
         shipment.Move,
         shipment.ShipmentInReturn,
+        shipment.ShipmentOutReturn,
         shipment.ReturnShipmentInStart,
+        shipment.ReturnShipmentOutStart,
         purchase.Purchase,
         module='stock_shipment_return', type_='model')
     Pool.register(
         shipment.ReturnShipmentIn,
+        shipment.ReturnShipmentOut,
         module='stock_shipment_return', type_='wizard')

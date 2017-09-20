@@ -1,10 +1,6 @@
-=================================
-Stock Shipment In Return Scenario
-=================================
-
-=============
-General Setup
-=============
+==============================
+Stock Shipment Return Scenario
+==============================
 
 Imports::
 
@@ -12,6 +8,8 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.modules.company.tests.tools import create_company, \
+    ...     get_company
     >>> today = datetime.date.today()
     >>> yesterday = today - relativedelta(days=1)
 
@@ -22,36 +20,15 @@ Create database::
 
 Install stock_shipment_return Module::
 
-    >>> Module = Model.get('ir.module.module')
-    >>> modules = Module.find([('name', '=', 'stock_shipment_return')])
-    >>> Module.install([x.id for x in modules], config.context)
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Module = Model.get('ir.module')
+    >>> module, = Module.find([('name', '=', 'stock_shipment_return')])
+    >>> module.click('install')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create company::
 
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
-    >>> Company = Model.get('company.company')
-    >>> Party = Model.get('party.party')
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='Dunder Mifflin')
-    >>> party.save()
-    >>> company.party = party
-    >>> currencies = Currency.find([('code', '=', 'USD')])
-    >>> if not currencies:
-    ...     currency = Currency(name='U.S. Dollar', symbol='$', code='USD',
-    ...         rounding=Decimal('0.01'), mon_grouping='[3, 3, 0]',
-    ...         mon_decimal_point='.', mon_thousands_sep=',')
-    ...     currency.save()
-    ...     CurrencyRate(date=today + relativedelta(month=1, day=1),
-    ...         rate=Decimal('1.0'), currency=currency).save()
-    ... else:
-    ...     currency, = currencies
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find()
+    >>> _ = create_company()
+    >>> company = get_company()
 
 Reload the context::
 
@@ -63,6 +40,11 @@ Create supplier::
     >>> Party = Model.get('party.party')
     >>> supplier = Party(name='Supplier')
     >>> supplier.save()
+
+Create customer::
+
+    >>> customer = Party(name='Customer')
+    >>> customer.save()
 
 Create category::
 
@@ -101,7 +83,9 @@ Get stock locations::
     >>> Location = Model.get('stock.location')
     >>> warehouse_loc, = Location.find([('code', '=', 'WH')])
     >>> supplier_loc, = Location.find([('code', '=', 'SUP')])
+    >>> customer_loc, = Location.find([('code', '=', 'CUS')])
     >>> input_loc, = Location.find([('code', '=', 'IN')])
+    >>> output_loc, = Location.find([('code', '=', 'OUT')])
     >>> storage_loc, = Location.find([('code', '=', 'STO')])
 
 Receive products::
@@ -171,3 +155,38 @@ Check available quantities::
     ...     product2.quantity
     50.0
     200.0
+
+Create Shipment Out::
+
+    >>> ShipmentOut = Model.get('stock.shipment.out')
+    >>> shipment_out = ShipmentOut()
+    >>> shipment_out.planned_date = today
+    >>> shipment_out.customer = customer
+    >>> shipment_out.warehouse = warehouse_loc
+    >>> shipment_out.company = company
+    >>> outgoing_move = shipment_out.outgoing_moves.new()
+    >>> outgoing_move.product = product
+    >>> outgoing_move.uom = unit
+    >>> outgoing_move.quantity = 1
+    >>> outgoing_move.from_location = output_loc
+    >>> outgoing_move.to_location = customer_loc
+    >>> outgoing_move.company = company
+    >>> outgoing_move.unit_price = Decimal('1')
+    >>> outgoing_move.currency = company.currency
+    >>> shipment_out.save()
+    >>> shipment_out.click('wait')
+
+Return some products using the wizard::
+
+    >>> ShipmentOutReturn = Model.get('stock.shipment.out.return')
+    >>> return_shipment = Wizard('stock.shipment.out.return_shipment',
+    ...     [shipment_out])
+    >>> return_shipment.execute('return_')
+    >>> returned_shipment, = ShipmentOutReturn.find([
+    ...     ('state', '=', 'draft'),
+    ...     ])
+    >>> returned_shipment.click('receive')
+    >>> len(returned_shipment.inventory_moves) == 1
+    True
+    >>> len(returned_shipment.incoming_moves) == 1
+    True
