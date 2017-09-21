@@ -9,7 +9,6 @@ def register():
     Pool.register(
         shipment.Move,
         shipment.ShipmentInReturn,
-        shipment.ShipmentOutReturn,
         shipment.ReturnShipmentInStart,
         shipment.ReturnShipmentOutStart,
         purchase.Purchase,
