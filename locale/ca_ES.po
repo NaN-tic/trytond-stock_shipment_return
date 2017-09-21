@@ -10,6 +10,10 @@ msgctxt "field:stock.shipment.in.return_shipment.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:stock.shipment.out.return_shipment.start,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "model:ir.action,name:act_shipment_in_returns"
 msgid "Returns"
 msgstr "Devolucions"
@@ -18,9 +22,25 @@ msgctxt "model:ir.action,name:wizard_return_shipment_in"
 msgid "Return Shipment"
 msgstr "Retorna albarà"
 
+msgctxt "model:ir.action,name:wizard_return_shipment_out"
+msgid "Return Shipment"
+msgstr "Retorna albarà"
+
 msgctxt "model:stock.shipment.in.return_shipment.start,name:"
 msgid "Return Supplier Shipment"
 msgstr "Albarà de devolució a proveïdor"
+
+msgctxt "model:stock.shipment.out.return_shipment.start,name:"
+msgid "Return Customer Shipment"
+msgstr "Retornar albarà de client"
+
+msgctxt "selection:stock.shipment.in.return,origin:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:stock.shipment.in.return,origin:"
+msgid "Purchase"
+msgstr "Compra"
 
 msgctxt "selection:stock.shipment.in.return,origin:"
 msgid "Shipment In"
@@ -28,16 +48,32 @@ msgstr "Albarà de proveïdor"
 
 msgctxt "view:stock.shipment.in.return_shipment.start:"
 msgid "Are you sure to return those/this supplier shipment(s)?"
-msgstr "Està segur de retornar aquest(s) albaran(s) de proveïdor"
+msgstr "Està segur de retornar aquest(s) albaran(s) de proveïdor?"
 
 msgctxt "view:stock.shipment.in.return_shipment.start:"
 msgid "Return Supplier Shipment"
 msgstr "Albarà de devolució a proveïdor"
+
+msgctxt "view:stock.shipment.out.return_shipment.start:"
+msgid "Are you sure to return those/this customer shipment(s)?"
+msgstr "Està segur de retornar aquest(s) albaran(s) de cliente?"
+
+msgctxt "view:stock.shipment.out.return_shipment.start:"
+msgid "Return Customer Shipment"
+msgstr "Retornar albarà de client"
 
 msgctxt "wizard_button:stock.shipment.in.return_shipment,start,end:"
 msgid "Cancel"
 msgstr "Cancel·la"
 
 msgctxt "wizard_button:stock.shipment.in.return_shipment,start,return_:"
+msgid "Return"
+msgstr "Retorna"
+
+msgctxt "wizard_button:stock.shipment.out.return_shipment,start,end:"
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgctxt "wizard_button:stock.shipment.out.return_shipment,start,return_:"
 msgid "Return"
 msgstr "Retorna"

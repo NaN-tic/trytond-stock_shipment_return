@@ -1,10 +1,6 @@
-=================================
-Stock Shipment In Return Scenario
-=================================
-
-=============
-General Setup
-=============
+==============================
+Stock Shipment Return Scenario
+==============================
 
 Imports::
 
@@ -14,10 +10,6 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
-    >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
-    ...     create_chart, get_accounts, create_tax, set_tax_code
-    >>> from trytond.modules.account_invoice.tests.tools import \
-    ...     set_fiscalyear_invoice_sequences, create_payment_term
     >>> today = datetime.date.today()
     >>> yesterday = today - relativedelta(days=1)
 
@@ -29,15 +21,14 @@ Create database::
 Install stock_shipment_return Module::
 
     >>> Module = Model.get('ir.module')
-    >>> modules = Module.find([('name', '=', 'stock_shipment_return')])
-    >>> Module.install([x.id for x in modules], config.context)
+    >>> module, = Module.find([('name', '=', 'stock_shipment_return')])
+    >>> module.click('install')
     >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create company::
 
     >>> _ = create_company()
     >>> company = get_company()
-    >>> party = company.party
 
 Reload the context::
 
@@ -50,6 +41,17 @@ Create supplier::
     >>> supplier = Party(name='Supplier')
     >>> supplier.save()
 
+Create customer::
+
+    >>> customer = Party(name='Customer')
+    >>> customer.save()
+
+Create category::
+
+    >>> ProductCategory = Model.get('product.category')
+    >>> category = ProductCategory(name='Category')
+    >>> category.save()
+
 Create product::
 
     >>> ProductUom = Model.get('product.uom')
@@ -58,6 +60,7 @@ Create product::
     >>> unit, = ProductUom.find([('name', '=', 'Unit')])
     >>> template = ProductTemplate()
     >>> template.name = 'Product 1'
+    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('20')
@@ -67,6 +70,7 @@ Create product::
 
     >>> template = ProductTemplate()
     >>> template.name = 'Product 2'
+    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('30')
@@ -79,7 +83,9 @@ Get stock locations::
     >>> Location = Model.get('stock.location')
     >>> warehouse_loc, = Location.find([('code', '=', 'WH')])
     >>> supplier_loc, = Location.find([('code', '=', 'SUP')])
+    >>> customer_loc, = Location.find([('code', '=', 'CUS')])
     >>> input_loc, = Location.find([('code', '=', 'IN')])
+    >>> output_loc, = Location.find([('code', '=', 'OUT')])
     >>> storage_loc, = Location.find([('code', '=', 'STO')])
 
 Receive products::
@@ -149,3 +155,38 @@ Check available quantities::
     ...     product2.quantity
     50.0
     200.0
+
+Create Shipment Out::
+
+    >>> ShipmentOut = Model.get('stock.shipment.out')
+    >>> shipment_out = ShipmentOut()
+    >>> shipment_out.planned_date = today
+    >>> shipment_out.customer = customer
+    >>> shipment_out.warehouse = warehouse_loc
+    >>> shipment_out.company = company
+    >>> outgoing_move = shipment_out.outgoing_moves.new()
+    >>> outgoing_move.product = product
+    >>> outgoing_move.uom = unit
+    >>> outgoing_move.quantity = 1
+    >>> outgoing_move.from_location = output_loc
+    >>> outgoing_move.to_location = customer_loc
+    >>> outgoing_move.company = company
+    >>> outgoing_move.unit_price = Decimal('1')
+    >>> outgoing_move.currency = company.currency
+    >>> shipment_out.save()
+    >>> shipment_out.click('wait')
+
+Return some products using the wizard::
+
+    >>> ShipmentOutReturn = Model.get('stock.shipment.out.return')
+    >>> return_shipment = Wizard('stock.shipment.out.return_shipment',
+    ...     [shipment_out])
+    >>> return_shipment.execute('return_')
+    >>> returned_shipment, = ShipmentOutReturn.find([
+    ...     ('state', '=', 'draft'),
+    ...     ])
+    >>> returned_shipment.click('receive')
+    >>> len(returned_shipment.inventory_moves) == 1
+    True
+    >>> len(returned_shipment.incoming_moves) == 1
+    True
