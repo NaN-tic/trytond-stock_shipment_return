@@ -10,6 +10,10 @@ msgctxt "field:stock.shipment.in.return_shipment.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:stock.shipment.out.return_shipment.start,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "model:ir.action,name:act_shipment_in_returns"
 msgid "Returns"
 msgstr "Devoluciones"
@@ -18,9 +22,25 @@ msgctxt "model:ir.action,name:wizard_return_shipment_in"
 msgid "Return Shipment"
 msgstr "Devolver albarán"
 
+msgctxt "model:ir.action,name:wizard_return_shipment_out"
+msgid "Return Shipment"
+msgstr "Devolver albarán"
+
 msgctxt "model:stock.shipment.in.return_shipment.start,name:"
 msgid "Return Supplier Shipment"
-msgstr "Albarán de devolución a proveedor"
+msgstr "Devolución albarán de proveedor"
+
+msgctxt "model:stock.shipment.out.return_shipment.start,name:"
+msgid "Return Customer Shipment"
+msgstr "Devolución albarán de cliente"
+
+msgctxt "selection:stock.shipment.in.return,origin:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:stock.shipment.in.return,origin:"
+msgid "Purchase"
+msgstr "Compra"
 
 msgctxt "selection:stock.shipment.in.return,origin:"
 msgid "Shipment In"
@@ -32,12 +52,28 @@ msgstr "¿Está seguro de devolver este/estos albaran(es) de proveedor?"
 
 msgctxt "view:stock.shipment.in.return_shipment.start:"
 msgid "Return Supplier Shipment"
-msgstr "Albarán de devolución a proveedor"
+msgstr "Devolución albarán de proveedor"
+
+msgctxt "view:stock.shipment.out.return_shipment.start:"
+msgid "Are you sure to return those/this customer shipment(s)?"
+msgstr "¿Está seguro de devolver este/estos albaran(es) de cliente?"
+
+msgctxt "view:stock.shipment.out.return_shipment.start:"
+msgid "Return Customer Shipment"
+msgstr "Devolución albarán de cliente"
 
 msgctxt "wizard_button:stock.shipment.in.return_shipment,start,end:"
 msgid "Cancel"
 msgstr "Cancelar"
 
 msgctxt "wizard_button:stock.shipment.in.return_shipment,start,return_:"
+msgid "Return"
+msgstr "Devolver"
+
+msgctxt "wizard_button:stock.shipment.out.return_shipment,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:stock.shipment.out.return_shipment,start,return_:"
 msgid "Return"
 msgstr "Devolver"
