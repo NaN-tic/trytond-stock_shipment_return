@@ -17,7 +17,7 @@ class Move:
     @classmethod
     def _get_origin(cls):
         models = super(Move, cls)._get_origin()
-        if not 'stock.move' in models:
+        if 'stock.move' not in models:
             models.append('stock.move')
         return models
 
@@ -69,7 +69,7 @@ class ReturnShipmentIn(Wizard):
                         'unit_price': inv_move.product.cost_price,
                         'currency': inv_move.company.currency.id,
                         'origin': None,
-                    })
+                        })
             shipment_in_returns.append(shipment_in_return)
 
         data = {'res_id': [s.id for s in shipment_in_returns]}
@@ -118,16 +118,15 @@ class ReturnShipmentOut(Wizard):
             for inv_move in shipment_out.inventory_moves:
                 Move.copy([inv_move], {
                         'shipment': str(shipment_out_return),
-                        'from_location': shipment_out.customer.customer_location,
+                        'from_location': (
+                            shipment_out.customer.customer_location),
                         'to_location': shipment_out.warehouse.input_location,
                         'effective_date': None,
                         'planned_date': None,
-                        # 'unit_price': inv_move.origin.unit_price,
-                        # 'currency': inv_move.origin.currency.id,
                         'unit_price': inv_move.product.cost_price,
                         'currency': inv_move.company.currency.id,
                         'origin': ('stock.move,%s' % inv_move.id),
-                    })
+                        })
             shipment_out_returns.append(shipment_out_return)
 
         data = {'res_id': [s.id for s in shipment_out_returns]}
