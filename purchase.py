@@ -5,8 +5,7 @@ from trytond.pool import PoolMeta
 __all__ = ['Purchase']
 
 
-class Purchase:
-    __metaclass__ = PoolMeta
+class Purchase(metaclass=PoolMeta):
     __name__ = 'purchase.purchase'
 
     def _get_return_shipment(self):

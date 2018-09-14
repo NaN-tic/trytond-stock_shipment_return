@@ -10,8 +10,7 @@ __all__ = ['Move', 'ShipmentInReturn',
     'ReturnShipmentOutStart', 'ReturnShipmentOut']
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'stock.move'
 
     @classmethod
@@ -22,8 +21,7 @@ class Move:
         return models
 
 
-class ShipmentInReturn:
-    __metaclass__ = PoolMeta
+class ShipmentInReturn(metaclass=PoolMeta):
     __name__ = 'stock.shipment.in.return'
     origin = fields.Reference('Origin', selection=[
                 (None, ''),
