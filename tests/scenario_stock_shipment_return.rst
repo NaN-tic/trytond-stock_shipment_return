@@ -16,7 +16,8 @@ Imports::
 
 Install stock_shipment_return Module::
 
-    >>> config = activate_modules('stock_shipment_return')
+    >>> config = activate_modules(['stock_shipment_return', 'sale', 
+    ...     'stock_origin'])
 
 Create company::
 
@@ -99,12 +100,12 @@ Receive products::
 
 Check available quantities::
 
-    >>> with config.set_context({'locations': [storage_loc.id], 'stock_date_end': today}):
-    ...     product.reload()
-    ...     product.quantity
-    ...     product2.reload()
-    ...     product2.quantity
+    >>> config._context.update({'locations': [storage_loc.id], 'stock_date_end': today})
+    >>> product = Product(product.id, config._context)
+    >>> product.quantity
     100.0
+    >>> product2 = Product(product2.id, config._context)
+    >>> product2.quantity
     200.0
 
 Return some products using the wizard::
@@ -136,12 +137,12 @@ Process returning shipment::
 
 Check available quantities::
 
-    >>> with config.set_context({'locations': [storage_loc.id], 'stock_date_end': today}):
-    ...     product.reload()
-    ...     product.quantity
-    ...     product2.reload()
-    ...     product2.quantity
+    >>> config._context.update({'locations': [storage_loc.id], 'stock_date_end': today})
+    >>> product = Product(product.id, config._context)
+    >>> product.quantity
     50.0
+    >>> product2 = Product(product2.id, config._context)
+    >>> product2.quantity
     200.0
 
 Create Shipment Out::
