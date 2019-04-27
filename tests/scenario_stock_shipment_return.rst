@@ -16,7 +16,7 @@ Imports::
 
 Install stock_shipment_return Module::
 
-    >>> config = activate_modules(['stock_shipment_return', 'sale', 
+    >>> config = activate_modules(['stock_shipment_return', 'sale',
     ...     'stock_origin'])
 
 Create company::
@@ -89,11 +89,13 @@ Receive products::
     >>> incoming_move.quantity = 100
     >>> incoming_move.from_location = supplier_loc
     >>> incoming_move.to_location = shipment_in.warehouse_input
+    >>> incoming_move.unit_price = Decimal(0)
     >>> incoming_move = shipment_in.incoming_moves.new()
     >>> incoming_move.product = product2
     >>> incoming_move.quantity = 200
     >>> incoming_move.from_location = supplier_loc
     >>> incoming_move.to_location = shipment_in.warehouse_input
+    >>> incoming_move.unit_price = Decimal(0)
     >>> shipment_in.save()
     >>> shipment_in.click('receive')
     >>> shipment_in.click('done')
