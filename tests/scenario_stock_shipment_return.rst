@@ -35,12 +35,6 @@ Create customer::
     >>> customer = Party(name='Customer')
     >>> customer.save()
 
-Create category::
-
-    >>> ProductCategory = Model.get('product.category')
-    >>> category = ProductCategory(name='Category')
-    >>> category.save()
-
 Create product::
 
     >>> ProductUom = Model.get('product.uom')
@@ -49,7 +43,6 @@ Create product::
     >>> unit, = ProductUom.find([('name', '=', 'Unit')])
     >>> template = ProductTemplate()
     >>> template.name = 'Product 1'
-    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('20')
@@ -59,7 +52,6 @@ Create product::
 
     >>> template = ProductTemplate()
     >>> template.name = 'Product 2'
-    >>> template.category = category
     >>> template.default_uom = unit
     >>> template.type = 'goods'
     >>> template.list_price = Decimal('30')
