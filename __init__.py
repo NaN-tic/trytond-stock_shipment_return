@@ -8,10 +8,10 @@ from . import purchase
 def register():
     Pool.register(
         shipment.Move,
+        shipment.ShipmentInReturn,
         shipment.ReturnShipmentInStart,
         module='stock_shipment_return', type_='model')
     Pool.register(
-        shipment.ShipmentInReturn,
         purchase.Purchase,
         module='stock_shipment_return', type_='model',
         depends=['purchase'])

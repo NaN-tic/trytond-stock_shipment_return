@@ -26,8 +26,16 @@ class ShipmentInReturn(metaclass=PoolMeta):
     origin = fields.Reference('Origin', selection=[
                 (None, ''),
                 ('stock.shipment.in', 'Shipment In'),
-                ('purchase.purchase', 'Purchase'),
             ], select=True, readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ShipmentInReturn, cls).__setup__()
+        try:
+            Pool().get('purchase.purchase')
+            cls.origin.selection.append(('purchase.purchase', 'Purchase'))
+        except KeyError:
+            pass
 
 
 class ReturnShipmentInStart(ModelView):
