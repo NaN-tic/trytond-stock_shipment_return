@@ -145,7 +145,7 @@ class ReturnShipmentOut(Wizard):
         ShipmentOutReturn = pool.get('stock.shipment.out.return')
         shipment = ShipmentOutReturn()
         shipment.customer = shipment_out.customer
-        shipment.delivery_address = shipment_out.delivery_address
+        shipment.contact_address = shipment_out.delivery_address
         shipment.company = shipment_out.company
         shipment.reference = shipment_out.number
         # TIP: known shipment origin with stock_origin module
