@@ -82,12 +82,14 @@ Receive products::
     >>> incoming_move.from_location = supplier_loc
     >>> incoming_move.to_location = shipment_in.warehouse_input
     >>> incoming_move.unit_price = Decimal(0)
+    >>> incoming_move.currency = company.currency
     >>> incoming_move = shipment_in.incoming_moves.new()
     >>> incoming_move.product = product2
     >>> incoming_move.quantity = 200
     >>> incoming_move.from_location = supplier_loc
     >>> incoming_move.to_location = shipment_in.warehouse_input
     >>> incoming_move.unit_price = Decimal(0)
+    >>> incoming_move.currency = company.currency
     >>> shipment_in.save()
     >>> shipment_in.click('receive')
     >>> shipment_in.click('done')
