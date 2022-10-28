@@ -11,8 +11,6 @@ Imports::
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
-    >>> today = datetime.date.today()
-    >>> yesterday = today - relativedelta(days=1)
 
 Install stock_shipment_return Module::
 
@@ -71,6 +69,7 @@ Get stock locations::
 
 Receive products::
 
+    >>> today = datetime.date.today()
     >>> ShipmentIn = Model.get('stock.shipment.in')
     >>> shipment_in = ShipmentIn()
     >>> shipment_in.planned_date = today
