@@ -26,7 +26,7 @@ class ShipmentInReturn(metaclass=PoolMeta):
     origin = fields.Reference('Origin', selection=[
                 (None, ''),
                 ('stock.shipment.in', 'Shipment In'),
-            ], select=True, readonly=True)
+            ], readonly=True)
 
     @classmethod
     def __setup__(cls):
