@@ -148,7 +148,10 @@ class ReturnShipmentOut(Wizard):
         shipment.contact_address = shipment_out.delivery_address
         shipment.company = shipment_out.company
         shipment.reference = shipment_out.number
+        shipment.warehouse = shipment_out.warehouse
+        shipment.on_change_warehouse()
         # TIP: known shipment origin with stock_origin module
         if hasattr(ShipmentOutReturn, 'origin_shipment'):
             shipment.origin_shipment = shipment_out
+
         return shipment
