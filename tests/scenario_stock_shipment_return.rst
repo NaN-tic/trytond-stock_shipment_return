@@ -127,7 +127,6 @@ Process returning shipment::
 
     >>> returned_shipment.click('wait')
     >>> returned_shipment.click('assign_try')
-    True
     >>> returned_shipment.click('done')
 
 Check available quantities::
