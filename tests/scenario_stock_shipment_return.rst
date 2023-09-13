@@ -149,7 +149,7 @@ Create Shipment Out::
     >>> shipment_out.company = company
     >>> outgoing_move = shipment_out.outgoing_moves.new()
     >>> outgoing_move.product = product
-    >>> outgoing_move.uom = unit
+    >>> outgoing_move.unit = unit
     >>> outgoing_move.quantity = 1
     >>> outgoing_move.from_location = output_loc
     >>> outgoing_move.to_location = customer_loc
