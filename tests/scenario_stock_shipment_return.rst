@@ -91,7 +91,7 @@ Receive products::
     >>> incoming_move.currency = company.currency
     >>> shipment_in.save()
     >>> shipment_in.click('receive')
-    >>> shipment_in.click('done')
+    >>> shipment_in.click('do')
 
 Check available quantities::
 
@@ -127,7 +127,7 @@ Process returning shipment::
 
     >>> returned_shipment.click('wait')
     >>> returned_shipment.click('assign_try')
-    >>> returned_shipment.click('done')
+    >>> returned_shipment.click('do')
 
 Check available quantities::
 
