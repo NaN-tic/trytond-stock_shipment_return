@@ -66,6 +66,9 @@ class Test(unittest.TestCase):
         customer_loc, = Location.find([('code', '=', 'CUS')])
         output_loc, = Location.find([('code', '=', 'OUT')])
         storage_loc, = Location.find([('code', '=', 'STO')])
+        storage_child = Location(
+            name='Storage Child', type='storage', parent=storage_loc)
+        storage_child.save()
 
         # Receive products
         today = datetime.date.today()
@@ -90,6 +93,11 @@ class Test(unittest.TestCase):
         incoming_move.currency = company.currency
         shipment_in.save()
         shipment_in.click('receive')
+        product_move, = [
+            move for move in shipment_in.inventory_moves
+            if move.product == product]
+        product_move.to_location = storage_child
+        product_move.save()
         shipment_in.click('do')
 
         # Check available quantities
@@ -113,6 +121,16 @@ class Test(unittest.TestCase):
         product2move = {m.product.id: m for m in returned_shipment.moves}
         self.assertEqual(product2move[product.id].quantity, 100.0)
         self.assertEqual(product2move[product2.id].quantity, 200.0)
+        self.assertEqual(
+            product2move[product.id].from_location, storage_child)
+        self.assertEqual(
+            product2move[product2.id].from_location, storage_loc)
+        returned_shipment.click('wait')
+        returned_shipment.click('draft')
+        returned_shipment.reload()
+        product2move = {m.product.id: m for m in returned_shipment.moves}
+        self.assertEqual(
+            product2move[product.id].from_location, storage_child)
         product2move[product.id].quantity = 50
         returned_shipment.moves.remove(product2move[product2.id])
         returned_shipment.save()
