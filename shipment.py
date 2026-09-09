@@ -2,6 +2,7 @@
 # copyright notices and license terms.
 from trytond.model import ModelView, fields
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
@@ -31,11 +32,42 @@ class ShipmentInReturn(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ShipmentInReturn, cls).__setup__()
+        cls.moves.domain = [
+            If(Eval('state') == 'draft', [
+                    ('from_location', 'child_of',
+                        [Eval('from_location', -1)], 'parent'),
+                    ('to_location', '=', Eval('to_location')),
+                    ],
+                If(~Eval('state').in_(['done', 'cancelled']), [
+                        ('from_location', 'child_of',
+                            [Eval('from_location', -1)], 'parent'),
+                        ('to_location', 'child_of',
+                            [Eval('to_location', -1)], 'parent'),
+                        ],
+                    [])),
+            ('company', '=', Eval('company', -1)),
+            ]
         try:
             Pool().get('purchase.purchase')
             cls.origin.selection.append(('purchase.purchase', 'Purchase'))
         except KeyError:
             pass
+
+    @classmethod
+    def draft(cls, shipments):
+        Move = Pool().get('stock.move')
+        location2moves = {}
+        for shipment in shipments:
+            for move in shipment.moves:
+                if (move.state != 'done'
+                        and move.from_location != shipment.from_location):
+                    location2moves.setdefault(
+                        move.from_location.id, []).append(move)
+
+        super().draft(shipments)
+
+        for location, moves in location2moves.items():
+            Move.write(moves, {'from_location': location})
 
 
 class ReturnShipmentInStart(ModelView):
